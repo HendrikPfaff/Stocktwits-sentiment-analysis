@@ -44,7 +44,7 @@ dict1_bearish <- dict1[dict1$sw<0,]
 
 dict2 <- read.table("./Sources/l2_lexicon.csv", sep=";", header = TRUE)
 dict2_bullish <- dict2[dict2$sentiment=='positive',]
-dict2_bearish <- dict2[dict2$sentiment=='negatice',]
+dict2_bearish <- dict2[dict2$sentiment=='negative',]
 
 #####SIMPLE WORDCOUNT: ONLY NUMBER OF BULLISH/BEARISH WORDS IN DOCUMENT#####
 bullmatch1 <- tm_term_score(tdm , dict1_bullish$keyword , FUN= slam:: col_sums)
