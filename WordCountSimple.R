@@ -4,11 +4,11 @@ library(ggplot2)
 library(SnowballC)
 
 ##### PREPARE DATA#####
-twits_json <-
-  '[
-{"Name" : "Doozio", "Message" : "Think we are going to see a sell to the bell today. This 🐑 is going into hiding! Correction underway", "Class":"Bearish"}, 
-{"Name" : "abubnic", "Message" : "Interesting article: How $ISRG Turned Medical Sci-Fi Into Reality. fortune.com/2017/10/23/intu... all aboard", "Class":"Bullish"}
-]'
+#twits_json <-
+#  '[
+#{"Name" : "Doozio", "Message" : "Think we are going to see a sell to the bell today. This 🐑 is going into hiding! Correction underway", "Class":"Bearish"}, 
+#{"Name" : "abubnic", "Message" : "Interesting article: How $ISRG Turned Medical Sci-Fi Into Reality. fortune.com/2017/10/23/intu... all aboard", "Class":"Bullish"}
+#]'
 
 twits_json <- "./Sources/raw.json"
 
