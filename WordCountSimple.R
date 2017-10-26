@@ -38,5 +38,10 @@ tdm <- TermDocumentMatrix(CorpusOfTweets)
 inspect (tdm[1:3 , 1:2])
 
 #####READ DICTIONARIES#####
+dict <- read.table("./Sources/l1_lexicon.csv", sep=";", header = TRUE)
+dict_bullish <- dict[dict$sw>0,]
+dict_bearish <- dict[dict$sw<0,]
 
-
+#####SIMPLE WORDCOUNT: ONLY NUMBER OF BULLISH/BEARISH WORDS IN DOCUMENT#####
+bullmatch <- tm_term_score(tdm , dict_bullish$keyword , FUN= slam:: col_sums)
+bearmatch <- tm_term_score(tdm , dict_bearish$keyword , FUN= slam:: col_sums)
