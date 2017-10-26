@@ -38,10 +38,17 @@ tdm <- TermDocumentMatrix(CorpusOfTweets)
 inspect (tdm[1:3 , 1:2])
 
 #####READ DICTIONARIES#####
-dict <- read.table("./Sources/l1_lexicon.csv", sep=";", header = TRUE)
-dict_bullish <- dict[dict$sw>0,]
-dict_bearish <- dict[dict$sw<0,]
+dict1 <- read.table("./Sources/l1_lexicon.csv", sep=";", header = TRUE)
+dict1_bullish <- dict1[dict1$sw>0,]
+dict1_bearish <- dict1[dict1$sw<0,]
+
+dict2 <- read.table("./Sources/l2_lexicon.csv", sep=";", header = TRUE)
+dict2_bullish <- dict2[dict2$sentiment=='positive',]
+dict2_bearish <- dict2[dict2$sentiment=='negatice',]
 
 #####SIMPLE WORDCOUNT: ONLY NUMBER OF BULLISH/BEARISH WORDS IN DOCUMENT#####
-bullmatch <- tm_term_score(tdm , dict_bullish$keyword , FUN= slam:: col_sums)
-bearmatch <- tm_term_score(tdm , dict_bearish$keyword , FUN= slam:: col_sums)
+bullmatch1 <- tm_term_score(tdm , dict1_bullish$keyword , FUN= slam:: col_sums)
+bearmatch1 <- tm_term_score(tdm , dict1_bearish$keyword , FUN= slam:: col_sums)
+
+bullmatch2 <- tm_term_score(tdm , dict2_bullish$keyword , FUN= slam:: col_sums)
+bearmatch2 <- tm_term_score(tdm , dict2_bearish$keyword , FUN= slam:: col_sums)
