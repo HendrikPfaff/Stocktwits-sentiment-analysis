@@ -7,21 +7,26 @@ library(SnowballC)
 twits_json <-
   '[
 {"Name" : "Doozio", "Message" : "Think we are going to see a sell to the bell today. This 🐑 is going into hiding! Correction underway", "Class":"Bearish"}, 
-{"Name" : "abubnic", "Message" : "Interesting article: How $ISRG Turned Medical Sci-Fi Into Reality. fortune.com/2017/10/23/intu...", "Class":"Bullish"}
+{"Name" : "abubnic", "Message" : "Interesting article: How $ISRG Turned Medical Sci-Fi Into Reality. fortune.com/2017/10/23/intu... all aboard", "Class":"Bullish"}
 ]'
+
+twits_json <- "./Sources/raw.json"
 
 #tweets as dataframe
 twits_df <- fromJSON(twits_json)
 
 #dataframe to corpus
-twits_corpus <- Corpus(VectorSource(twits_df[,2]))
+twits_corpus <- Corpus(VectorSource(twits_df$message))
 
 #####CLEAR UP TWEETS#####
-#to ascii
+#to ascii ACHTUNG FEHLER
 CorpusOfTweets <- iconv(twits_corpus , to = "ASCII", sub = "")
 
 #remove punctuation
 CorpusOfTweets <- tm_map(twits_corpus, removePunctuation)
+
+#remove numbers
+CorpusOfTweets <- tm_map(CorpusOfTweets, removeNumbers)
 
 #lower case
 CorpusOfTweets <- tm_map(CorpusOfTweets, content_transformer(tolower))
@@ -52,3 +57,13 @@ bearmatch1 <- tm_term_score(tdm , dict1_bearish$keyword , FUN= slam:: col_sums)
 
 bullmatch2 <- tm_term_score(tdm , dict2_bullish$keyword , FUN= slam:: col_sums)
 bearmatch2 <- tm_term_score(tdm , dict2_bearish$keyword , FUN= slam:: col_sums)
+
+#####RESULTS#####
+result_dict1 <- data.frame(bullmatch1, bearmatch1, twits_df$tag)
+result_dict2 <- data.frame(bullmatch2, bearmatch2, twits_df$tag)
+
+result_dict1$predicted <- ifelse(result_dict1$bullmatch1 > result_dict1$bearmatch1,"Bullish", ifelse(result_dict1$bullmatch1 < result_dict1$bearmatch1,"Bearish", "NA"))
+colnames(result_dict1) <- c("#Words Bullish", "#WordsBearish", "Tag", "Predicted")
+
+result_dict2$predicted <- ifelse(result_dict2$bullmatch2 > result_dict2$bearmatch2,"Bullish", ifelse(result_dict2$bullmatch2 < result_dict2$bearmatch2,"Bearish", "NA"))
+colnames(result_dict2) <- c("#Words Bullish", "#WordsBearish", "Tag", "Predicted")
