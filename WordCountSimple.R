@@ -18,10 +18,6 @@ twits_df <- fromJSON(twits_json)
 #dataframe to corpus
 twits_corpus <- Corpus(VectorSource(twits_df$message))
 
-#####CLEAR UP TWEETS#####
-#to ascii ACHTUNG FEHLER
-CorpusOfTweets <- iconv(twits_corpus , to = "ASCII", sub = "")
-
 #remove punctuation
 CorpusOfTweets <- tm_map(twits_corpus, removePunctuation)
 
