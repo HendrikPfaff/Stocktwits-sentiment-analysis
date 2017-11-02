@@ -16,16 +16,16 @@ twits_json <- "./Sources/raw.json"
 twits_df <- fromJSON(twits_json)
 
 #dataframe to corpus
-twits_corpus <- Corpus(VectorSource(twits_df$message))
+CorpusOfTweets <- Corpus(VectorSource(twits_df$message))
 
 #remove punctuation
-CorpusOfTweets <- tm_map(twits_corpus, removePunctuation)
+#CorpusOfTweets <- tm_map(CorpusOfTweets, removePunctuation)
 
 #remove numbers
-CorpusOfTweets <- tm_map(CorpusOfTweets, removeNumbers)
+#CorpusOfTweets <- tm_map(CorpusOfTweets, removeNumbers)
 
 #lower case
-CorpusOfTweets <- tm_map(CorpusOfTweets, content_transformer(tolower))
+#CorpusOfTweets <- tm_map(CorpusOfTweets, content_transformer(tolower))
 
 #remove stopword 
 #ATTENTION: dictionary contains stopwords!!!
@@ -55,11 +55,24 @@ bullmatch2 <- tm_term_score(tdm , dict2_bullish$keyword , FUN= slam:: col_sums)
 bearmatch2 <- tm_term_score(tdm , dict2_bearish$keyword , FUN= slam:: col_sums)
 
 #####RESULTS#####
-result_dict1 <- data.frame(bullmatch1, bearmatch1, twits_df$tag)
-result_dict2 <- data.frame(bullmatch2, bearmatch2, twits_df$tag)
+result_dict1 <- data.frame(twits_df$messageID, bullmatch1, bearmatch1, twits_df$tag)
+result_dict2 <- data.frame(twits_df$messageID, bullmatch2, bearmatch2, twits_df$tag)
 
 result_dict1$predicted <- ifelse(result_dict1$bullmatch1 > result_dict1$bearmatch1,"Bullish", ifelse(result_dict1$bullmatch1 < result_dict1$bearmatch1,"Bearish", "NA"))
-colnames(result_dict1) <- c("#Words Bullish", "#WordsBearish", "Tag", "Predicted")
+colnames(result_dict1) <- c("MessageID", "#Words Bullish", "#WordsBearish", "Tag", "Predicted")
 
 result_dict2$predicted <- ifelse(result_dict2$bullmatch2 > result_dict2$bearmatch2,"Bullish", ifelse(result_dict2$bullmatch2 < result_dict2$bearmatch2,"Bearish", "NA"))
-colnames(result_dict2) <- c("#Words Bullish", "#WordsBearish", "Tag", "Predicted")
+colnames(result_dict2) <- c("MessageID", "#Words Bullish", "#WordsBearish", "Tag", "Predicted")
+
+#####RESULTS WITH TAGS#####
+result_dict1_train <- result_dict1[result_dict1$Tag != 'NULL',]
+result_dict2_train <- result_dict2[result_dict2$Tag != 'NULL',]
+
+#####SOME STATISTICS#####
+result1_correct_classified <- subset(result_dict1_train, Tag == Predicted)
+result1_incorrect_classified <- subset(result_dict1_train, Predicted != 'NA' & Tag != Predicted)
+result1_na_classified <- subset(result_dict1_train, Predicted=='NA')
+
+result2_correct_classified <- subset(result_dict2_train, Tag == Predicted)
+result2_incorrect_classified <- subset(result_dict2_train, Predicted != 'NA' & Tag != Predicted)
+result2_na_classified <- subset(result_dict2_train, Predicted=='NA')
