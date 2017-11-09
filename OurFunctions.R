@@ -1,6 +1,7 @@
-library(SentimentAnalysis)
-library(jsonlite)
-library(SnowballC)
+require(SentimentAnalysis)
+require(tm)
+require(jsonlite)
+require(SnowballC)
 
 ##### preprocessing function
 #####
