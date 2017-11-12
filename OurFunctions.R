@@ -7,24 +7,37 @@ require(SnowballC)
 #####
 ##### Parameter:
 #####     *myCorpus: corpus of the twits
+#####     *procedures: vector of booleans to select procedures 
+#####                 (remove punctuation, remove numbers, lower case, remove stopwords, stemming)
 #####
 ##### Return: corpus after...
-stock.twits.preprocessing <- function(myCorpus){
-  #remove punctuation
-  #myCorpus <- tm_map(myCorpus, removePunctuation)
+stock.twits.preprocessing <- function(myCorpus, procedures){
   
-  #remove numbers
-  #myCorpus <- tm_map(myCorpus, removeNumbers)
+  if(procedures[1]){
+    #remove punctuation
+    myCorpus <- tm_map(myCorpus, removePunctuation)
+  }
   
-  #lower case
-  #myCorpus <- tm_map(myCorpus, content_transformer(tolower))
+  if(procedures[2]){
+    #remove numbers
+    myCorpus <- tm_map(myCorpus, removeNumbers)
+  }
   
-  #remove stopword 
-  #ATTENTION: dictionary contains stopwords!!!
-  #myCorpus <- tm_map(myCorpus , removeWords , c(stopwords("english")))
+  if(procedures[3]){
+    #lower case
+    myCorpus <- tm_map(myCorpus, content_transformer(tolower))
+  }
   
-  #stemming
-  myCorpus <- tm_map(myCorpus , stemDocument)
+  if(procedures[4]){
+    #remove stopword 
+    #ATTENTION: dictionary contains stopwords!!!
+    myCorpus <- tm_map(myCorpus , removeWords , c(stopwords("english")))
+  }
+  
+  if(procedures[5]){
+    #stemming
+    myCorpus <- tm_map(myCorpus , stemDocument)
+  }
   
   return(myCorpus)
 }

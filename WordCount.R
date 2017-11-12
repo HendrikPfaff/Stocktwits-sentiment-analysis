@@ -6,7 +6,7 @@ twits_df <- fromJSON(twits_json)
 CorpusOfTweets <- Corpus(VectorSource(twits_df$message))
 
 #####PREPROCESSING#####
-CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets)
+CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
 
 #####TERM DOCUMENT MATRIX#####
 tdm <- TermDocumentMatrix(CorpusOfTweets)
