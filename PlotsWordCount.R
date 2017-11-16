@@ -2,11 +2,11 @@ library(ggplot2)
 library(reshape2)
 
 #####DISTRIBUTION SAMPLE#####
-df.twits <- data.frame(Statistics=c("Twits", "Twits with Tags", "Twits without Tags", "Bullish Tags", "Bearish Tags"),
+df.twits <- data.frame(Distribution=c("Twits", "Twits with Tags", "Twits without Tags", "Bullish Tags", "Bearish Tags"),
                           Number=c(2896, 1208, 1688, 997, 211))
-p.twits <- ggplot(data=df.twits, aes(x=Statistics, y=Number)) + 
+p.twits <- ggplot(data=df.twits, aes(x=Distribution, y=Number)) + 
   geom_bar(stat="identity", fill="steelblue") + 
-  scale_x_discrete(limits= df.twits$Statistics) +
+  scale_x_discrete(limits= df.twits$Distribution) +
   geom_text(aes(label=Number), vjust=1.6, color="white", size=3.5) +
   theme_minimal() +
   ggtitle("Distribution of StockTwits Sample") +
