@@ -15,17 +15,17 @@ CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, 
 #####TERM DOCUMENT MATRIX#####
 twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
 
-twits_df_train <- twits_df_labeled[1:604,]
-twits_df_test <- twits_df_labeled[605:1208,]
+twits_df_train <- twits_df_labeled[1:966,]
+twits_df_test <- twits_df_labeled[967:1208,]
 
-twits_tdm_train <- twits_tdm[1:604,]
-twits_tdm_test <- twits_tdm[605:1208,]
+twits_tdm_train <- twits_tdm[1:966,]
+twits_tdm_test <- twits_tdm[967:1208,]
 
-CorpusOfTweets_train <- CorpusOfTweets[1:604]
-CorpusOfTweets_test <- CorpusOfTweets[605:1208]
+CorpusOfTweets_train <- CorpusOfTweets[1:966]
+CorpusOfTweets_test <- CorpusOfTweets[967:1208]
 
-twits_train_labels <- twits_df_labeled[1:604,]$tag
-twits_test_labels <- twits_df_labeled[605:1208,]$tag
+twits_train_labels <- twits_df_labeled[1:966,]$tag
+twits_test_labels <- twits_df_labeled[967:1208,]$tag
 
 prop.table(table(twits_train_labels))
 prop.table(table(twits_test_labels))
@@ -52,6 +52,3 @@ table("Predictions"= twits_test_pred,  "Actual" = twits_df_test$tag )
 
 conf.mat <- confusionMatrix(twits_test_pred, twits_df_test$tag)
 conf.mat
-conf.mat$byClass
-conf.mat$overall
-conf.mat$overall['Accuracy']

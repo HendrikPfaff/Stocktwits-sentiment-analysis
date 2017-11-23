@@ -2,6 +2,8 @@ source("./OurFunctions.R")
 library(e1071)
 library(caret)
 
+set.seed(1337)
+
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
 twits_df_raw <- fromJSON(twits_json)
@@ -22,17 +24,17 @@ CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, 
 #####TERM DOCUMENT MATRIX#####
 twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
 
-twits_df_train <- twits_df_labeled[1:211,]
-twits_df_test <- twits_df_labeled[212:422,]
+twits_df_train <- twits_df_labeled[1:337,]
+twits_df_test <- twits_df_labeled[338:422,]
 
-twits_tdm_train <- twits_tdm[1:211,]
-twits_tdm_test <- twits_tdm[212:422,]
+twits_tdm_train <- twits_tdm[1:337,]
+twits_tdm_test <- twits_tdm[338:422,]
 
-CorpusOfTweets_train <- CorpusOfTweets[1:211]
-CorpusOfTweets_test <- CorpusOfTweets[212:422]
+CorpusOfTweets_train <- CorpusOfTweets[1:337]
+CorpusOfTweets_test <- CorpusOfTweets[338:422]
 
-twits_train_labels <- twits_df_labeled[1:211,]$tag
-twits_test_labels <- twits_df_labeled[212:422,]$tag
+twits_train_labels <- twits_df_labeled[1:337,]$tag
+twits_test_labels <- twits_df_labeled[338:422,]$tag
 
 prop.table(table(twits_train_labels))
 prop.table(table(twits_test_labels))
