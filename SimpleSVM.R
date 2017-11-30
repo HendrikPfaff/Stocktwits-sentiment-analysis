@@ -9,16 +9,22 @@ twits_df_labeled <- subset(twits_df_raw, tag != "NULL")
 twits_df_labeled$tag <- as.factor(twits_df_labeled$tag)
 CorpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
 
-twits_df_train <- twits_df_labeled[1:966,]
-twits_df_test <- twits_df_labeled[967:1208,]
+#####Define Samples#####
+trainTestRatio <- 0.8
+set.seed(42)
+trainingIds <- sort(sample(1:nrow(twits_df_labeled), nrow(twits_df_labeled)*trainTestRatio))
+
+#####Create Subsets#####
+twits_df_train <- twits_df_labeled[trainingIds,]
+twits_df_test <- twits_df_labeled[-trainingIds,]
 
 #####PREPROCESSING#####
 CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
 
 #####TERM DOCUMENT MATRIX#####
 twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
-twits_tdm_train <- twits_tdm[1:966,]
-twits_tdm_test <- twits_tdm[967:1208,]
+twits_tdm_train <- twits_tdm[trainingIds,]
+twits_tdm_test <- twits_tdm[-trainingIds,]
 
 twits_classifier <- svm(twits_tdm_train,twits_df_train$tag, kernel = "linear")
 

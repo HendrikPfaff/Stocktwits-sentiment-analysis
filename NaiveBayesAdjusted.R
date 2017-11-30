@@ -2,7 +2,7 @@ source("./OurFunctions.R")
 library(e1071)
 library(caret)
 
-set.seed(1337)
+set.seed(42)
 
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
@@ -11,38 +11,44 @@ twits_df_raw <- fromJSON(twits_json)
 #####ADJUSTMENTS#####
 twits_df_bull <- subset(twits_df_raw, tag == "Bullish")
 twits_df_bear <- subset(twits_df_raw, tag == "Bearish")
-twits_df_bull <- twits_df_bull[1:211,]
+
+sampleIds <- sort(sample(1:nrow(twits_df_bull), nrow(twits_df_bear)))
+
+twits_df_bull <- twits_df_bull[sampleIds,]
 twits_df_labeled <- rbind(twits_df_bull, twits_df_bear)
 twits_df_labeled <- twits_df_labeled[sample(nrow(twits_df_labeled)), ]
 twits_df_labeled$tag <- as.factor(twits_df_labeled$tag)
 
-CorpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
+corpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
 
 #####PREPROCESSING#####
-CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
+corpusOfTweets <- stock.twits.preprocessing(corpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
 
 #####TERM DOCUMENT MATRIX#####
-twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
+twits_tdm <- DocumentTermMatrix(corpusOfTweets)
 
-twits_df_train <- twits_df_labeled[1:337,]
-twits_df_test <- twits_df_labeled[338:422,]
+trainTestRatio <- 0.8
+trainingIds <- sort(sample(1:nrow(twits_df_labeled), nrow(twits_df_labeled)*trainTestRatio))
 
-twits_tdm_train <- twits_tdm[1:337,]
-twits_tdm_test <- twits_tdm[338:422,]
+twits_df_train <- twits_df_labeled[trainingIds,]
+twits_df_test <- twits_df_labeled[-trainingIds,]
 
-CorpusOfTweets_train <- CorpusOfTweets[1:337]
-CorpusOfTweets_test <- CorpusOfTweets[338:422]
+twits_tdm_train <- twits_tdm[trainingIds,]
+twits_tdm_test <- twits_tdm[-trainingIds,]
 
-twits_train_labels <- twits_df_labeled[1:337,]$tag
-twits_test_labels <- twits_df_labeled[338:422,]$tag
+corpusOfTweets_train <- corpusOfTweets[trainingIds]
+corpusOfTweets_test <- corpusOfTweets[-trainingIds]
+
+twits_train_labels <- twits_df_labeled[trainingIds,]$tag
+twits_test_labels <- twits_df_labeled[-trainingIds,]$tag
 
 prop.table(table(twits_train_labels))
 prop.table(table(twits_test_labels))
 
 frequent_terms <- findFreqTerms(twits_tdm_train,5)
 
-twits_tdm_freq_train <- DocumentTermMatrix(CorpusOfTweets_train, control=list(dictionary = frequent_terms))
-twits_tdm_freq_test <- DocumentTermMatrix(CorpusOfTweets_test, control=list(dictionary = frequent_terms))
+twits_tdm_freq_train <- DocumentTermMatrix(corpusOfTweets_train, control=list(dictionary = frequent_terms))
+twits_tdm_freq_test <- DocumentTermMatrix(corpusOfTweets_test, control=list(dictionary = frequent_terms))
 
 convert_counts <- function(x){
   y <- ifelse(x > 0, 1,0)

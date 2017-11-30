@@ -7,33 +7,38 @@ twits_json <- "./Sources/raw.json"
 twits_df_raw <- fromJSON(twits_json)
 twits_df_labeled <- subset(twits_df_raw, tag != "NULL")
 twits_df_labeled$tag <- as.factor(twits_df_labeled$tag)
-CorpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
+corpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
+
+#####Define Samples#####
+trainTestRatio <- 0.8
+set.seed(42)
+trainingIds <- sort(sample(1:nrow(twits_df_labeled), nrow(twits_df_labeled)*trainTestRatio))
 
 #####PREPROCESSING#####
-CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
+corpusOfTweets <- stock.twits.preprocessing(corpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
 
 #####TERM DOCUMENT MATRIX#####
-twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
+twits_tdm <- DocumentTermMatrix(corpusOfTweets)
 
-twits_df_train <- twits_df_labeled[1:966,]
-twits_df_test <- twits_df_labeled[967:1208,]
+twits_df_train <- twits_df_labeled[trainingIds,]
+twits_df_test <- twits_df_labeled[-trainingIds,]
 
-twits_tdm_train <- twits_tdm[1:966,]
-twits_tdm_test <- twits_tdm[967:1208,]
+twits_tdm_train <- twits_tdm[trainingIds,]
+twits_tdm_test <- twits_tdm[-trainingIds,]
 
-CorpusOfTweets_train <- CorpusOfTweets[1:966]
-CorpusOfTweets_test <- CorpusOfTweets[967:1208]
+corpusOfTweets_train <- corpusOfTweets[trainingIds]
+corpusOfTweets_test <- corpusOfTweets[-trainingIds]
 
-twits_train_labels <- twits_df_labeled[1:966,]$tag
-twits_test_labels <- twits_df_labeled[967:1208,]$tag
+twits_train_labels <- twits_df_labeled[trainingIds,]$tag
+twits_test_labels <- twits_df_labeled[-trainingIds,]$tag
 
 prop.table(table(twits_train_labels))
 prop.table(table(twits_test_labels))
 
 frequent_terms <- findFreqTerms(twits_tdm_train,5)
 
-twits_tdm_freq_train <- DocumentTermMatrix(CorpusOfTweets_train, control=list(dictionary = frequent_terms))
-twits_tdm_freq_test <- DocumentTermMatrix(CorpusOfTweets_test, control=list(dictionary = frequent_terms))
+twits_tdm_freq_train <- DocumentTermMatrix(corpusOfTweets_train, control=list(dictionary = frequent_terms))
+twits_tdm_freq_test <- DocumentTermMatrix(corpusOfTweets_test, control=list(dictionary = frequent_terms))
 
 convert_counts <- function(x){
   y <- ifelse(x > 0, 1,0)
