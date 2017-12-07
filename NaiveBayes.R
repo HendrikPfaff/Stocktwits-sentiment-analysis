@@ -2,16 +2,21 @@ source("./OurFunctions.R")
 library(e1071)
 library(caret)
 
+set.seed(42)
+
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
 twits_df_raw <- fromJSON(twits_json)
 twits_df_labeled <- subset(twits_df_raw, tag != "NULL")
 twits_df_labeled$tag <- as.factor(twits_df_labeled$tag)
+
+##### BALANCING #####
+twits_df_labeled <- stock.twits.balance.data(twits_df_labeled,500)
+
 corpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
 
 #####Define Samples#####
 trainTestRatio <- 0.8
-set.seed(42)
 trainingIds <- sort(sample(1:nrow(twits_df_labeled), nrow(twits_df_labeled)*trainTestRatio))
 
 #####PREPROCESSING#####

@@ -99,3 +99,23 @@ stock.twits.score.weighted <- function(df, weightedDict, twitsCorpus){
 
   return(result)
 }
+
+##### BESCHREIBUNG
+#####
+##### Parameter:
+#####     *df:
+#####
+##### Return: data frame BESCHREIBUNG
+stock.twits.balance.data <- function(df, sampleSize){
+  twits_bullish <- subset(df, tag == "Bullish")
+  twits_bearish <- subset(df, tag == "Bearish")
+  
+  training_ids_bullish <- sample(1:nrow(twits_bullish), sampleSize)
+  twits_bullish <- twits_bullish[training_ids_bullish,]
+  
+  training_ids_bearish <- sample(1:nrow(twits_bearish), sampleSize, replace = TRUE)
+  twits_bearish <- twits_bearish[training_ids_bearish,]
+  
+  df <- rbind(twits_bullish, twits_bearish)
+  return(df)
+}
