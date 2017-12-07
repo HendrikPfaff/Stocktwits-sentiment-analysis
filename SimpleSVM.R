@@ -1,6 +1,7 @@
 source("./OurFunctions.R")
 library(RTextTools)
 library(caret)
+library(e1071)
 
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
