@@ -122,4 +122,4 @@ stock.twits.balance.data <- function(df, sampleSize){
   return(df)
 }
 
-BigramTokenizer <- function(x) NGramTokenize(x, Weka_control(min=2, max=2))
+BigramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min=1, max=2))
