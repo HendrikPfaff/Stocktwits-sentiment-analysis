@@ -3,13 +3,13 @@ source("./OurFunctions.R")
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
 twits_df <- fromJSON(twits_json)
-CorpusOfTweets <- Corpus(VectorSource(twits_df$message))
+CorpusOfTweets <- VCorpus(VectorSource(twits_df$message))
 
 #####PREPROCESSING#####
 CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(FALSE, FALSE, FALSE, FALSE, FALSE))
 
 #####TERM DOCUMENT MATRIX#####
-tdm <- TermDocumentMatrix(CorpusOfTweets, control = list(tokenize = BigramTokenizer))
+tdm <- TermDocumentMatrix(CorpusOfTweets, control = list(wordLengths=c(1,Inf), tokenize = BigramTokenizer))
 inspect (tdm[1:3 , 1:2])
 
 #####READ DICTIONARIES#####

@@ -122,4 +122,8 @@ stock.twits.balance.data <- function(df, sampleSize){
   return(df)
 }
 
+##### benötigt:
+##### dyn.load('/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre/lib/server/libjvm.dylib')
+##### require(rJava)
+
 BigramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min=1, max=2))
