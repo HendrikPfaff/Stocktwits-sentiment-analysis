@@ -1,11 +1,17 @@
+source("./OurFunctions.R")
 library(RTextTools)
 library(caret)
+
+set.seed(42)
 
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
 twits_df_raw <- fromJSON(twits_json)
 twits_df_labeled <- subset(twits_df_raw, tag != "NULL")
 twits_df_labeled$tag <- as.factor(twits_df_labeled$tag)
+
+##### BALANCING (optional: comment out if not used) #####
+twits_df_labeled <- stock.twits.balance.data(twits_df_labeled,500)
 
 doc_matrix <- create_matrix(twits_df_labeled$message, language = "english", removeNumbers = TRUE, stemWords = TRUE, removeSparseTerms=.998)
 

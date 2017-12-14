@@ -117,5 +117,6 @@ stock.twits.balance.data <- function(df, sampleSize){
   twits_bearish <- twits_bearish[training_ids_bearish,]
   
   df <- rbind(twits_bullish, twits_bearish)
+  df <- df[sample(nrow(df)),]
   return(df)
 }

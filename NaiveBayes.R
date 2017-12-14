@@ -10,9 +10,10 @@ twits_df_raw <- fromJSON(twits_json)
 twits_df_labeled <- subset(twits_df_raw, tag != "NULL")
 twits_df_labeled$tag <- as.factor(twits_df_labeled$tag)
 
-##### BALANCING #####
+##### BALANCING (optional: comment out if not used) #####
 twits_df_labeled <- stock.twits.balance.data(twits_df_labeled,500)
 
+##### CREATE CORPUS #####
 corpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
 
 #####Define Samples#####
