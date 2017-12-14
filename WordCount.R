@@ -9,7 +9,7 @@ CorpusOfTweets <- Corpus(VectorSource(twits_df$message))
 CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(FALSE, FALSE, FALSE, FALSE, FALSE))
 
 #####TERM DOCUMENT MATRIX#####
-tdm <- TermDocumentMatrix(CorpusOfTweets)
+tdm <- TermDocumentMatrix(CorpusOfTweets, control = list(tokenize = BigramTokenizer))
 inspect (tdm[1:3 , 1:2])
 
 #####READ DICTIONARIES#####

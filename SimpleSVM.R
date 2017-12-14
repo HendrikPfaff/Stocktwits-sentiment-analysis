@@ -32,7 +32,7 @@ twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
 twits_tdm_train <- twits_tdm[trainingIds,]
 twits_tdm_test <- twits_tdm[-trainingIds,]
 
-twits_classifier <- svm(twits_tdm_train,twits_df_train$tag, kernel = "linear")
+twits_classifier <- svm(twits_tdm_train,twits_df_train$tag, kernel = "linear", type = "C-classification")
 
 twits_test_pred <- predict(twits_classifier,newdata=twits_tdm_test)
 
