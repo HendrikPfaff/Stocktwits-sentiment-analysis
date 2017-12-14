@@ -2,6 +2,7 @@ require(SentimentAnalysis)
 require(tm)
 require(jsonlite)
 require(SnowballC)
+require(RWeka)
 
 ##### preprocessing function
 #####
@@ -88,9 +89,9 @@ stock.twits.score.simple <- function(df,tdm,dictBull, dictBear){
 #####     *twitsCorpus: 
 #####
 ##### Return: data frame containing the scoring results
-stock.twits.score.weighted <- function(df, weightedDict, twitsCorpus){
+stock.twits.score.weighted <- function(df, weightedDict, tdm){
   #####SIMPLE SENTIMENT WITH WEIGHTED DICTIONARY#####
-  sentiment <- predict(weightedDict, twitsCorpus)
+  sentiment <- predict(weightedDict, tdm)
   
   #####RESULTS#####
   result <- data.frame(df$messageID, df$tag, sentiment)
@@ -120,3 +121,5 @@ stock.twits.balance.data <- function(df, sampleSize){
   df <- df[sample(nrow(df)),]
   return(df)
 }
+
+BigramTokenizer <- function(x) NGramTokenize(x, Weka_control(min=2, max=2))

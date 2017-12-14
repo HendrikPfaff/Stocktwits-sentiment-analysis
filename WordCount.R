@@ -6,7 +6,7 @@ twits_df <- fromJSON(twits_json)
 CorpusOfTweets <- Corpus(VectorSource(twits_df$message))
 
 #####PREPROCESSING#####
-CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
+CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(FALSE, FALSE, FALSE, FALSE, FALSE))
 
 #####TERM DOCUMENT MATRIX#####
 tdm <- TermDocumentMatrix(CorpusOfTweets)
@@ -18,7 +18,7 @@ stock.twits.read.dictionaries()
 #####SCORING#####
 results_dict1_binary <- stock.twits.score.simple(twits_df, tdm, dict1_binary_bullish, dict1_binary_bearish)
 results_dict2_binary <- stock.twits.score.simple(twits_df, tdm, dict2_binary_bullish, dict2_binary_bearish)
-results_dict1_weighted <- stock.twits.score.weighted(twits_df, dict1_weighted, CorpusOfTweets)
+results_dict1_weighted <- stock.twits.score.weighted(twits_df, dict1_weighted, tdm)
 
 #####RESULTS WITH TAGS#####
 results_dict1_binary_train <- results_dict1_binary[results_dict1_binary$Tag != 'NULL',]
