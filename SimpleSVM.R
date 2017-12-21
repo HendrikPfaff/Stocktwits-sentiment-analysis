@@ -32,9 +32,12 @@ twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
 twits_tdm_train <- twits_tdm[trainingIds,]
 twits_tdm_test <- twits_tdm[-trainingIds,]
 
+#####CREATE CLASSIFIER#####
 twits_classifier <- svm(twits_tdm_train,twits_df_train$tag, kernel = "linear", type = "C-classification")
 
+#####USE CLASSIFIER#####
 twits_test_pred <- predict(twits_classifier,newdata=twits_tdm_test)
 
+#####CONFUSION MATRIX#####
 conf.mat <- confusionMatrix(twits_test_pred, twits_df_test$tag)
 conf.mat

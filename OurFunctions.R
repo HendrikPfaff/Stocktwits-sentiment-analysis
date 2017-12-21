@@ -11,7 +11,7 @@ require(RWeka)
 #####     *procedures: vector of booleans to select procedures 
 #####                 (remove punctuation, remove numbers, lower case, remove stopwords, stemming)
 #####
-##### Return: corpus after...
+##### Return: corpus after optional removePunctuation, removeNumbers, lowercasing, stopword removal and stemming
 stock.twits.preprocessing <- function(myCorpus, procedures){
   
   if(procedures[1]){
@@ -43,7 +43,7 @@ stock.twits.preprocessing <- function(myCorpus, procedures){
   return(myCorpus)
 }
 
-##### function for reading the dictionaries in the environment
+##### function for reading the dictionaries in the global environment
 stock.twits.read.dictionaries <- function(){
   #####READ DICTIONARIES#####
   dict1 <<- read.table("./Sources/l1_lexicon.csv", sep=";", header = TRUE)
@@ -85,8 +85,8 @@ stock.twits.score.simple <- function(df,tdm,dictBull, dictBear){
 #####
 ##### Parameter:
 #####     *df: data frame of the twits
-#####     *weightedDict: 
-#####     *twitsCorpus: 
+#####     *weightedDict: weighted dictionary
+#####     *twitsCorpus: corpus of twits 
 #####
 ##### Return: data frame containing the scoring results
 stock.twits.score.weighted <- function(df, weightedDict, tdm){
@@ -101,12 +101,13 @@ stock.twits.score.weighted <- function(df, weightedDict, tdm){
   return(result)
 }
 
-##### BESCHREIBUNG
+##### balacing with oversampling (sampling with replacement)
 #####
 ##### Parameter:
-#####     *df:
+#####     *df: original data frame
+#####     *sampleSize: target size for each class (<= 997)
 #####
-##### Return: data frame BESCHREIBUNG
+##### Return: balanced data frame with 50% bullish and 50% bearish tags
 stock.twits.balance.data <- function(df, sampleSize){
   twits_bullish <- subset(df, tag == "Bullish")
   twits_bearish <- subset(df, tag == "Bearish")
@@ -122,7 +123,7 @@ stock.twits.balance.data <- function(df, sampleSize){
   return(df)
 }
 
-##### benötigt:
+##### requires:
 ##### dyn.load('/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre/lib/server/libjvm.dylib')
 ##### require(rJava)
 

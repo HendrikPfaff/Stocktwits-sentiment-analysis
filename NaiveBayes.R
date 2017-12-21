@@ -26,6 +26,7 @@ corpusOfTweets <- stock.twits.preprocessing(corpusOfTweets, c(TRUE, TRUE, TRUE, 
 #####TERM DOCUMENT MATRIX#####
 twits_tdm <- DocumentTermMatrix(corpusOfTweets)
 
+#####SPLIT TEST AND TRAIN DATA#####
 twits_df_train <- twits_df_labeled[trainingIds,]
 twits_df_test <- twits_df_labeled[-trainingIds,]
 
@@ -38,9 +39,11 @@ corpusOfTweets_test <- corpusOfTweets[-trainingIds]
 twits_train_labels <- twits_df_labeled[trainingIds,]$tag
 twits_test_labels <- twits_df_labeled[-trainingIds,]$tag
 
+#####SHOW PROPBABILITIES OF CLASSES#####
 prop.table(table(twits_train_labels))
 prop.table(table(twits_test_labels))
 
+#####GET TERM FREQUENCIES#####
 frequent_terms <- findFreqTerms(twits_tdm_train,5)
 
 twits_tdm_freq_train <- DocumentTermMatrix(corpusOfTweets_train, control=list(dictionary = frequent_terms))
@@ -52,13 +55,16 @@ convert_counts <- function(x){
   y
 }
 
+#####BUILD CLASSIFICATOR#####
 twits_train <- apply(twits_tdm_freq_train,MARGIN = 2,convert_counts)
 twits_test <- apply(twits_tdm_freq_test,MARGIN = 2,convert_counts)
 
 twits_classifier <- naiveBayes(twits_train,twits_df_train$tag)
 
+#####USE CLASSIFICATOR#####
 twits_test_pred <- predict(twits_classifier,newdata=twits_test)
 
+#####CONFUSION MATRIX#####
 table("Predictions"= twits_test_pred,  "Actual" = twits_df_test$tag )
 
 conf.mat <- confusionMatrix(twits_test_pred, twits_df_test$tag)
