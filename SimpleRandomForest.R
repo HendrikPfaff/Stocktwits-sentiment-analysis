@@ -14,7 +14,7 @@ twits_df_labeled$tag <- as.factor(twits_df_labeled$tag)
 twits_df_labeled <- stock.twits.balance.data(twits_df_labeled,500)
 
 #####CREATE MATRIX#####
-doc_matrix <- create_matrix(twits_df_labeled$message, language = "english", removeNumbers = TRUE, stemWords = TRUE, removeSparseTerms=.998)
+doc_matrix <- create_matrix(twits_df_labeled$message, language = "english", removeNumbers = FALSE, stemWords = FALSE, removeStopwords = FALSE, toLower = FALSE, removePunctuation = FALSE, removeSparseTerms=.998)
 
 #####CREATE CONTAINER AND TRAIN MODEL#####
 trainTestRatio <- 0.8

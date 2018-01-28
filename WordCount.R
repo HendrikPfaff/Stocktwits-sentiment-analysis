@@ -1,9 +1,16 @@
 source("./OurFunctions.R")
 
+set.seed(42)
+
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
 twits_df <- fromJSON(twits_json)
 twits_df_labeled <- subset(twits_df, tag != "NULL")
+
+##### BALANCING (optional: comment out if not used) #####
+twits_df_labeled <- stock.twits.balance.data(twits_df_labeled,500)
+
+#####BUILD CORPUS#####
 CorpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
 
 #####PREPROCESSING#####
@@ -55,3 +62,5 @@ na <- c(nrow(results_dict1_binary_na), nrow(results_dict2_binary_na), nrow(resul
 
 results_df <- data.frame(TruePositive, FalsePositive, naPositive, FalseNegative, TrueNegative, naNegative, na)
 rownames(results_df) <- c('Dict1_binary', 'Dict2_binary', 'Dict1_weighted')
+
+results_df

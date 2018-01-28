@@ -21,7 +21,7 @@ trainTestRatio <- 0.8
 trainingIds <- sort(sample(1:nrow(twits_df_labeled), nrow(twits_df_labeled)*trainTestRatio))
 
 #####PREPROCESSING#####
-corpusOfTweets <- stock.twits.preprocessing(corpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
+corpusOfTweets <- stock.twits.preprocessing(corpusOfTweets, c(FALSE, FALSE, FALSE, FALSE, FALSE))
 
 #####TERM DOCUMENT MATRIX#####
 twits_tdm <- DocumentTermMatrix(corpusOfTweets)

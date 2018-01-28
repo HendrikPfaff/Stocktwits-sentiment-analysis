@@ -3,6 +3,8 @@ library(RTextTools)
 library(caret)
 library(e1071)
 
+set.seed(42)
+
 #####READ TWEETS#####
 twits_json <- "./Sources/raw.json"
 twits_df_raw <- fromJSON(twits_json)
@@ -17,7 +19,6 @@ CorpusOfTweets <- VCorpus(VectorSource(twits_df_labeled$message))
 
 #####Define Samples#####
 trainTestRatio <- 0.8
-set.seed(42)
 trainingIds <- sort(sample(1:nrow(twits_df_labeled), nrow(twits_df_labeled)*trainTestRatio))
 
 #####Create Subsets#####
@@ -25,7 +26,7 @@ twits_df_train <- twits_df_labeled[trainingIds,]
 twits_df_test <- twits_df_labeled[-trainingIds,]
 
 #####PREPROCESSING#####
-CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(TRUE, TRUE, TRUE, TRUE, TRUE))
+CorpusOfTweets <- stock.twits.preprocessing(CorpusOfTweets, c(FALSE, FALSE, FALSE, FALSE, FALSE))
 
 #####TERM DOCUMENT MATRIX#####
 twits_tdm <- DocumentTermMatrix(CorpusOfTweets)
